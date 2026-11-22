@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="FPV GCS — Ground Control Station. Windows x64. 16 RC channels. H.264 video.">
+<defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#07111e"/><stop offset="1" stop-color="#142c3d"/></linearGradient>
+  <linearGradient id="accent"><stop stop-color="#61e6c5"/><stop offset="1" stop-color="#54b8f7"/></linearGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#93b8d1" stroke-opacity=".07"/></pattern>
+</defs>
+<rect width="1280" height="420" rx="24" fill="url(#bg)"/>
+<rect width="1280" height="420" rx="24" fill="url(#grid)"/>
+<rect x="64" y="62" width="5" height="28" rx="2" fill="#61e6c5"/>
+<g font-family="Segoe UI,Arial,sans-serif">
+<text x="84" y="83" fill="#91acbf" font-size="17" letter-spacing="4">GROUND CONTROL STATION</text>
+<text x="60" y="195" fill="#eef7ff" font-size="92" font-weight="700" letter-spacing="-3">FPV GCS</text>
+<text x="65" y="244" fill="#a9c1d2" font-size="23">Відео та керування. В одному вікні.</text>
+<rect x="64" y="302" width="142" height="42" rx="21" fill="#203b4c"/><text x="88" y="329" fill="#c1dbea" font-size="16">Windows x64</text>
+<rect x="220" y="302" width="157" height="42" rx="21" fill="#203b4c"/><text x="244" y="329" fill="#c1dbea" font-size="16">16 RC каналів</text>
+<rect x="391" y="302" width="143" height="42" rx="21" fill="#203b4c"/><text x="416" y="329" fill="#c1dbea" font-size="16">H.264 відео</text>
+</g>
+<g transform="translate(845 210)" fill="none">
+<circle r="141" stroke="#63c8e5" stroke-opacity=".14"/><circle r="101" stroke="#63c8e5" stroke-opacity=".24"/><circle r="61" stroke="#63c8e5" stroke-opacity=".34"/>
+<path d="M-165 0H165M0-165V165" stroke="#63c8e5" stroke-opacity=".14"/>
+<path d="M-35-35L35 35M-35 35L35-35" stroke="url(#accent)" stroke-width="9" stroke-linecap="round"/>
+<g stroke="#61e6c5" stroke-width="3"><circle cx="-44" cy="-44" r="25"/><circle cx="44" cy="-44" r="25"/><circle cx="-44" cy="44" r="25"/><circle cx="44" cy="44" r="25"/></g>
+<circle r="12" fill="#d9fff4" stroke="none"/>
+<path d="M-70-122A141 141 0 0 1 122-70" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+</g>
+<g fill="#61e6c5"><circle cx="1083" cy="104" r="4"/><circle cx="1160" cy="311" r="3"/></g>
+</svg>

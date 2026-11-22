@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.log
+*.pid
+.research/
+*.jsonl
+fpv-gcs/verification/
+fpv-gcs/releases/

@@ -1,0 +1,18 @@
+[Unit]
+Description=FPV C2U H.264 RTP sender
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -u %h/fpv-gcs-udp/systemd/launch.py video
+Restart=always
+RestartSec=3
+TimeoutStopSec=8
+KillMode=control-group
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=fpv-video
+
+[Install]
+WantedBy=default.target

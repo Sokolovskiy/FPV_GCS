@@ -1,0 +1,20 @@
+[Unit]
+Description=FPV UDP to CRSF gateway (420000 baud, 50 Hz)
+ConditionPathExists=%h/.config/fpv-gcs/physical-crsf-approved
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=%h/fpv-gcs-udp
+ExecStart=/usr/bin/python3 -u %h/fpv-gcs-udp/systemd/launch.py rc
+Restart=always
+RestartSec=3
+TimeoutStopSec=8
+KillMode=control-group
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=fpv-rc
+
+[Install]
+WantedBy=default.target

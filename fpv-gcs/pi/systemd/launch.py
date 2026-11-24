@@ -7,7 +7,6 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parent.parent
-CAMERA = os.environ.get('FPV_CAMERA', '/dev/v4l/by-id/usb-ARKMICRO_USB2.0_PC_CAMERA-video-index0')
 
 
 def main():
@@ -23,32 +22,14 @@ def main():
                    os.O_CREAT | os.O_RDWR, 0o600)
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     os.set_inheritable(lock, True)
-    if mode != 'rc-dry-run':
-        device = Path(CAMERA if mode == 'video' else '/dev/serial0').resolve(strict=True)
+    if mode == 'rc':
+        device = Path('/dev/serial0').resolve(strict=True)
         check = subprocess.run(['/usr/bin/fuser', str(device)], capture_output=True, text=True)
         if check.returncode != 1 or check.stdout.strip() or check.stderr.strip():
             raise RuntimeError(f'Refusing busy/uncheckable device {device}: '
                                f'{check.stdout} {check.stderr}')
     if mode == 'video':
-        # Retry startup when the configured Windows host has no usable route.
-        route = subprocess.check_output(['/usr/sbin/ip', '-j', 'route', 'get',
-                                         '192.168.144.3'], text=True)
-        import json
-        interface = json.loads(route)[0]['dev']
-        state = Path('/sys/class/net', interface, 'operstate').read_text().strip()
-        if state not in {'up', 'unknown'}:
-            raise RuntimeError(f'Network {interface} is {state}; retrying via systemd')
-        command = ['/usr/bin/gst-launch-1.0', '-e', '-v',
-                   'v4l2src', f'device={CAMERA}', 'io-mode=mmap', 'do-timestamp=true',
-                   '!', 'image/jpeg,width=640,height=480,framerate=30/1',
-                   '!', 'queue', 'max-size-buffers=2', 'max-size-bytes=0',
-                   'max-size-time=0', 'leaky=downstream',
-                   '!', 'jpegdec', '!', 'video/x-raw,format=I420',
-                   '!', 'openh264enc', 'bitrate=2000000', 'complexity=low',
-                   '!', 'h264parse', '!', 'watchdog', 'timeout=5000',
-                   '!', 'rtph264pay', 'pt=96', 'config-interval=1', 'mtu=1200',
-                   '!', 'udpsink', 'host=192.168.144.3', 'port=5602',
-                   'sync=false', 'async=false']
+        command = ['/usr/bin/python3', '-u', str(ROOT / 'video_capture.py')]
     else:
         command = ['/usr/bin/python3', '-u', str(ROOT / 'rc_receiver.py'),
                    '--dry-run' if mode == 'rc-dry-run' else '--uart',

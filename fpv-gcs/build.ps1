@@ -31,11 +31,14 @@ if (-not (Test-Path -LiteralPath "$fpvSdlRoot\lib\cmake\SDL3\SDL3Config.cmake"))
 }
 & $CMake -S $fpvStageSource -B "$fpvBuildRoot\build" -G Ninja "-DCMAKE_MAKE_PROGRAM=$Ninja" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_PREFIX_PATH=$QtRoot;$fpvSdlRoot" "-DCMAKE_CXX_COMPILER=$CompilerRoot\g++.exe" "-DGSTREAMER_ROOT=$GStreamerRoot"
 if ($LASTEXITCODE) { throw 'CMake configure failed' }
-& $CMake --build "$fpvBuildRoot\build" --target FPV_GCS fpv_tests --parallel 4
+& $CMake --build "$fpvBuildRoot\build" --target FPV_GCS fpv_tests fpv_capture_tests --parallel 4
 if ($LASTEXITCODE) { throw 'Build failed' }
 & "$fpvBuildRoot\build\fpv_tests.exe" -o "$fpvBuildRoot\test-results.txt,txt"
 if ($LASTEXITCODE) { throw 'Tests failed' }
 Get-Content -LiteralPath "$fpvBuildRoot\test-results.txt"
+& "$fpvBuildRoot\build\fpv_capture_tests.exe" -platform offscreen -o "$fpvBuildRoot\capture-test-results.txt,txt" | Out-Host
+if ($LASTEXITCODE) { throw 'Capture UI tests failed' }
+Get-Content -LiteralPath "$fpvBuildRoot\capture-test-results.txt"
 $fpvDistribution = Join-Path $fpvBuildRoot 'package-rc'
 New-Item -ItemType Directory -Path $fpvDistribution -Force | Out-Null
 Copy-Item -LiteralPath "$fpvBuildRoot\build\FPV GCS.exe" -Destination $fpvDistribution
@@ -54,6 +57,7 @@ if ($LASTEXITCODE) { throw 'Qt deployment failed' }
 Copy-Item -LiteralPath "$fpvProjectRoot\README.md" -Destination $fpvDistribution
 New-Item -ItemType Directory -Path "$fpvDistribution\pi" -Force | Out-Null
 Copy-Item -Path "$fpvProjectRoot\pi\*.py" -Destination "$fpvDistribution\pi" -Force
+Copy-Item -LiteralPath "$fpvProjectRoot\pi\systemd" -Destination "$fpvDistribution\pi" -Recurse -Force
 $fpvLicenseRoot = Join-Path $fpvDistribution 'licenses'
 New-Item -ItemType Directory -Path $fpvLicenseRoot -Force | Out-Null
 Copy-Item -Path "$GStreamerRoot\share\licenses" -Destination (Join-Path $fpvLicenseRoot 'gstreamer') -Recurse -Force
@@ -82,4 +86,5 @@ foreach ($fpvGeneratedName in @('generic', 'networkinformation', 'tls')) {
 }
 Copy-Item -Path "$fpvDistribution\*" -Destination $fpvFinal -Recurse -Force
 Copy-Item -LiteralPath "$fpvBuildRoot\test-results.txt" -Destination (Join-Path $fpvFinal 'test-results.txt')
+Copy-Item -LiteralPath "$fpvBuildRoot\capture-test-results.txt" -Destination (Join-Path $fpvFinal 'capture-test-results.txt')
 Write-Output "Built: $fpvFinal\FPV GCS.exe"

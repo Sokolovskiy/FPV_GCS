@@ -1,4 +1,4 @@
-#define AppVersion "0.1.9"
+#define AppVersion "0.1.10"
 #ifndef PackageDir
   #error PackageDir must point to the prepared runtime folder
 #endif

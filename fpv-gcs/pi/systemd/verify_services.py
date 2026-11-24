@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import subprocess
 import time
+from urllib.request import urlopen
 
 
 def run(*args):
@@ -62,20 +63,30 @@ try:
         assert info(name)['ActiveState'] == 'inactive', 'Manual stop restarted'
         ctl('start', name)
         ready(name)
-    # A missing camera must retry without affecting RC and recover when restored.
-    ctl('stop', 'fpv-video.service')
-    video_override.write_text('[Service]\nEnvironment=FPV_CAMERA=/dev/fpv-test-absent-c2u\n')
-    ctl('daemon-reload')
+    # The video manager now stays alive without USB devices. Do not use the old
+    # FPV_CAMERA failure injection: selection belongs to the manager, not systemd.
+    # Hotplug/no-device selection is covered by test_video_capture.py; physical
+    # unplug must be checked separately on the video dongles.
+    with urlopen('http://192.168.144.20:5603/state', timeout=3) as response:
+        video_before = json.load(response)
     other_pid = info('fpv-rc.service')['MainPID']
-    ctl('start', 'fpv-video.service')
-    time.sleep(7)
-    failed = info('fpv-video.service')
-    assert int(failed['NRestarts']) >= 1
+    ctl('restart', 'fpv-video.service')
+    ready('fpv-video.service')
+    deadline = time.monotonic() + 15
+    while time.monotonic() < deadline:
+        try:
+            with urlopen('http://192.168.144.20:5603/state', timeout=3) as response:
+                video_after = json.load(response)
+            if 'devices' in video_after:
+                break
+        except OSError:
+            pass
+        time.sleep(.3)
+    else:
+        raise RuntimeError('Video API did not recover')
     assert info('fpv-rc.service')['MainPID'] == other_pid
-    results['simulated_missing_camera'] = failed
-    video_override.unlink()
-    ctl('daemon-reload')
-    results['camera_restored'] = ready('fpv-video.service')
+    assert video_after['preferred'] == video_before['preferred']
+    results['video_manager_restored'] = {'active': video_after['active'], 'preferred': video_after['preferred']}
     results['linger'] = run('loginctl', 'show-user', 'sokolovskyi', '-p', 'Linger')
     results['uart_holders'] = subprocess.run(['fuser', '/dev/ttyAMA0'], capture_output=True, text=True).stdout
     assert not results['uart_holders'].strip()

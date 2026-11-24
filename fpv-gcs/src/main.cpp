@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     }
     QCoreApplication::setOrganizationName("FPVGCS");
     QCoreApplication::setApplicationName("FPV GCS");
-    QCoreApplication::setApplicationVersion("0.1.9");
+    QCoreApplication::setApplicationVersion("0.1.10");
     const auto dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     QDir().mkpath(dataDir);
     QLockFile instance(dataDir + "/application.lock");

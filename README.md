@@ -8,9 +8,9 @@
 ![Platform](https://img.shields.io/badge/Windows-10%20%2F%2011%20x64-5ab8f4)
 ![Stack](https://img.shields.io/badge/C%2B%2B20-Qt%206%20%C2%B7%20SDL3%20%C2%B7%20GStreamer-93a9bf)
 
-### [⬇ Завантажити EXE для Windows](https://github.com/Sokolovskiy/FPV_GCS/releases/latest/download/FPV-GCS-Setup-0.1.9-win64.exe)
+### [⬇ Завантажити EXE для Windows](https://github.com/Sokolovskiy/FPV_GCS/releases/latest/download/FPV-GCS-Setup-0.1.10-win64.exe)
 
-[Portable ZIP](https://github.com/Sokolovskiy/FPV_GCS/releases/latest/download/FPV-GCS-Portable-0.1.9-win64.zip) · [Усі релізи](https://github.com/Sokolovskiy/FPV_GCS/releases) · [Повідомити про проблему](https://github.com/Sokolovskiy/FPV_GCS/issues)
+[Portable ZIP](https://github.com/Sokolovskiy/FPV_GCS/releases/latest/download/FPV-GCS-Portable-0.1.10-win64.zip) · [Усі релізи](https://github.com/Sokolovskiy/FPV_GCS/releases) · [Повідомити про проблему](https://github.com/Sokolovskiy/FPV_GCS/issues)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 ## Встановлення
 
-1. Завантажте **FPV-GCS-Setup-0.1.9-win64.exe** і відкрийте інсталятор.
+1. Завантажте **FPV-GCS-Setup-0.1.10-win64.exe** і відкрийте інсталятор.
 2. Виберіть українську або англійську мову та встановіть додаток. Права адміністратора не потрібні.
 3. Запустіть **FPV GCS** з меню «Пуск».
 

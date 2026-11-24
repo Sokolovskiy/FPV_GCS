@@ -1,6 +1,7 @@
 #include "window.h"
 #include "mappingdialog.h"
 #include "video.h"
+#include "capture.h"
 #include <QSplitter>
 #include <QCloseEvent>
 #include <QVBoxLayout>
@@ -40,7 +41,7 @@ QIcon settingsIcon() {
 }
 
 Window::Window() {
-    setWindowTitle("FPV GCS — RC Channels · 0.1.9"); resize(1090, 860); setMinimumSize(930, 740);
+    setWindowTitle("FPV GCS — RC Channels · 0.1.10"); resize(1090, 860); setMinimumSize(930, 740);
     resize(1580, 860);
     auto* fullscreen = new QShortcut(QKeySequence(Qt::Key_F11), this);
     fullscreen->setAutoRepeat(false);
@@ -70,20 +71,10 @@ Window::Window() {
     m_devices->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
     m_devices->setMinimumContentsLength(8); deviceRow->addWidget(m_devices, 1);
     auto* inputs = new QPushButton("Діагностика…"); deviceRow->addWidget(inputs); layout->addLayout(deviceRow);
-    auto* videoStatus = new QLabel("NO SIGNAL");
-    videoStatus->setStyleSheet("color:#f3b76b;font-weight:600");
-    auto* videoRow = new QHBoxLayout;
-    videoRow->addWidget(videoStatus);
-    auto* videoInfo = new QLabel("H.264 / RTP / UDP · 192.168.144.3:5602");
-    videoInfo->setObjectName("subtitle"); videoInfo->setWordWrap(true);
-    videoInfo->setAlignment(Qt::AlignRight | Qt::AlignVCenter); videoRow->addWidget(videoInfo, 1);
-    layout->addLayout(videoRow);
-    connect(m_video, &VideoPanel::statusChanged, this, [videoStatus](bool connected, const QString& detail) {
-        videoStatus->setText(connected ? "VIDEO CONNECTED" : "NO SIGNAL");
-        videoStatus->setStyleSheet(connected ? "color:#57d7b3;font-weight:600" : "color:#f3b76b;font-weight:600");
-        videoStatus->setToolTip(detail);
-    });
     m_udp.port = quint16(std::clamp(QSettings().value("udp/port", 14600).toInt(), 1, 65535));
+    auto* captureBar = new CaptureBar;
+    layout->addWidget(captureBar);
+    connect(m_video, &VideoPanel::statusChanged, captureBar, &CaptureBar::videoStatus);
     m_table = new QTableWidget(ChannelCount, 4);
     m_table->setHorizontalHeaderLabels({"Function", "RC Level", "Функція каналу", ""});
     m_table->verticalHeader()->hide(); m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);

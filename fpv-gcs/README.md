@@ -1,7 +1,7 @@
 # FPV GCS — RC Channels
 
 Standalone Windows application: Qt 6 Widgets, C++20, CMake, SDL3 Joystick API.
-Version 0.1.9 transmits the existing `std::array<uint16_t, 16>` in 1000–2000
+Version 0.1.10 transmits the existing `std::array<uint16_t, 16>` in 1000–2000
 over UDP through Herelink to Raspberry Pi at 192.168.144.20:14600, targeting 100 Hz.
 The mapping and profiles are unchanged. USB disconnection suppresses all UDP RC packets.
 The Pi gateway separately produces CRSF at 50 Hz / 420000 baud when physically approved.
@@ -267,6 +267,31 @@ Profiles save automatically as JSON under `%LOCALAPPDATA%/FPVGCS/FPV GCS/profile
 USB IDs, input counts, and serial when available; otherwise device path is included.
 A different port/path may require remapping if the transmitter provides no serial.
 Invalid profiles fail to unassigned safe defaults. Writes use atomic `QSaveFile`.
+
+## Video capture sources and settings
+
+The compact toolbar above the RC channel table contains the active Pi USB capture selector
+and **Video Capture Settings** gear. Both selectors share the Pi's active device;
+the receiver endpoint remains `192.168.144.3:5602`. The selector remains usable
+while the receiver shows NO SIGNAL. Device names and all capture capabilities
+come from the Pi, including unavailable devices and live USB changes.
+
+Settings show actual V4L2 formats, resolution/FPS, physical input/TV standards
+when supported, image controls with driver ranges/defaults,
+negotiated caps, measured RTP bitrate and transport-sink drop counters.
+Image controls apply immediately without resetting the scroll position;
+**Apply capture format**, inside the Capture Format group, restarts
+only the video pipeline. **Restore image defaults** uses driver defaults.
+
+The Pi independently selects a saved preferred device, or the first available
+stable USB identity, and waits for late USB connections when none are present.
+Loss of analog video does not change USB selection. Settings persist per camera
+under `~/.config/fpv-gcs/video-capture.json`. A serialless dongle retains identity
+at the same USB port. The Pi video manager must be installed alongside the updated
+Windows app; see [Pi installation and API](pi/systemd/README.md).
+
+The standalone build is `dist/FPV GCS/FPV GCS.exe`; an already installed older
+Start-menu copy is not replaced by building this checkout.
 
 ## Build and verify
 

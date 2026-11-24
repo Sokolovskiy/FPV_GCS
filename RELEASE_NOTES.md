@@ -1,3 +1,56 @@
+# FPV GCS 0.1.10
+
+Керування реальними USB-відеозахватами Raspberry Pi з Windows FPV GCS.
+
+## Пакети
+
+- `FPV-GCS-Setup-0.1.10-win64.exe` — інсталятор Windows 10/11 x64.
+- `FPV-GCS-Portable-0.1.10-win64.zip` — розпакуйте всю папку та запустіть `FPV GCS.exe`.
+- `FPV-GCS-Pi-0.1.10.zip` — Python-скрипти та systemd-файли Pi, інструкція в `pi/systemd/README.md`.
+- `SHA256SUMS-0.1.10.txt` — контрольні суми всіх трьох пакетів.
+
+Qt, SDL та GStreamer включено до Windows-пакетів. Для нових налаштувань
+камер потрібне оновлення Pi; Windows-інсталятор сам Pi не змінює.
+
+## Зміни
+
+- Селектор USB-камери й кнопка Settings над таблицею RC-каналів; список відкривається вниз.
+- Спільний стан активної камери в головному вікні та Video Capture Settings.
+- Автовибір камери на Pi, відновлення preferred device та окрема конфігурація кожного захвату.
+- Стабільні USB ID, оновлення списку при підключенні/відключенні, очікування без камер.
+- Фізичне відключення USB обробляється окремо від відсутності CVBS-сигналу.
+- Реальні V4L2 формати, FPS, inputs, standards та image controls із driver min/max/step/default.
+- Застосування формату кнопкою в Capture Format і контрольований restart лише відеоконвеєра.
+- Image controls оновлюються без стрибків прокрутки та втрати чернетки формату; однакові числові поля зі стрілками.
+- У Stream Status показано negotiated caps, bitrate та доступні лічильники; H.264 Encoding із форми прибрано.
+- Один вихідний потік H.264/RTP/UDP на `192.168.144.3:5602`; RC/CRSF, watchdog, UART та telemetry не змінені.
+
+## Оновлення Pi
+
+Збережіть наявні файли перед заміною. У користувацькому каталозі
+`~/fpv-gcs-udp/` оновіть `video_capture.py` та `systemd/launch.py` з Pi-пакета.
+Встановіть залежності й перезапустіть лише відеосервіс:
+
+```sh
+sudo apt-get install python3-gi gir1.2-gstreamer-1.0 v4l-utils psmisc
+systemctl --user restart fpv-video.service
+```
+
+API: `192.168.144.20:5603`, Windows peer: `192.168.144.3`.
+Конфігурація: `~/.config/fpv-gcs/video-capture.json`. Для захватів без
+серійного номера стабільна ідентифікація прив'язана до USB-порту.
+
+## Перевірки та межі
+
+Windows build та 30 QtTest перевірок пройдено. Python-набір: 64 успішні,
+одна Linux-only перевірка пропущена на Windows; 17 video tests також
+виконано на Pi. На реальних MACROSILICON/ARKMICRO перевірено перемикання
+джерел, декодування H.264, controls, capture format та service restart.
+Фізичне USB unplug/replug і повний reboot Pi не виконувалися. Інсталятор
+не має цифрового підпису видавця.
+
+---
+
 # FPV GCS 0.1.9
 
 Перша опублікована Windows-збірка: відео H.264, USB-пульт і 16 RC-каналів в одному вікні.

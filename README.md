@@ -87,6 +87,7 @@ ES900TX; він керує ELRS-приймачем на дроні. Аналог
 
 | Матеріал | Посилання |
 | --- | --- |
+| Темплейт пульта TORO HERELINK та встановлення | [Темплейт EdgeTX](docs/radio-template.md) |
 | Архітектура, протокол, USB та складання | [Технічна документація](fpv-gcs/README.md) |
 | Приймач і watchdog Raspberry Pi | [Pi gateway](fpv-gcs/pi/README.md) |
 | Встановлення сервісів Pi | [systemd](fpv-gcs/pi/systemd/README.md) |

@@ -1,6 +1,11 @@
-# Автозапуск Pi — завдання 10
+# Автозапуск Pi
 
-Два незалежні **user systemd units** користувача `sokolovskyi`.
+Для встановлення на чисту Pi почніть із
+[покрокової інструкції для Pi 3 Model B](https://github.com/Sokolovskiy/FPV_GCS/blob/main/docs/pi-setup.md).
+Цей документ — довідка для вже налаштованих сервісів.
+
+Два незалежні **user systemd units** користувача, який виконує встановлення
+(у покроковій інструкції — `fpv`).
 `loginctl enable-linger` запускає його systemd під час boot і зберігає після
 закриття SSH. Обидва units мають `WantedBy=default.target`, `Restart=always`,
 паузу 3 с і необмежені повторні спроби. Ручний stop не викликає restart.
@@ -15,11 +20,11 @@ systemctl --user start fpv-rc.service
 systemctl --user restart fpv-video.service
 systemctl --user disable --now fpv-rc.service
 systemctl --user enable --now fpv-rc.service
-loginctl show-user sokolovskyi -p Linger
+loginctl show-user "$USER" -p Linger
 ```
 
 Для відео так само доступні start/stop/restart/enable/disable. Команди запускайте
-як `sokolovskyi`, без sudo. Шлях units: `~/.config/systemd/user/`.
+як користувач, що встановив сервіси, без sudo. Шлях units: `~/.config/systemd/user/`.
 
 ## Логи
 
@@ -35,7 +40,7 @@ journald повертає порожній журнал; потрібний на
 ## RC
 
 Запускається наявний `~/fpv-gcs-udp/rc_receiver.py`: `--uart --baudrate 420000
---port 14600 --sender 192.168.0.161 --timeout-ms 300`. CRSF 50 Hz задає наявний
+--port 14600 --sender 192.168.144.3 --timeout-ms 300`. CRSF 50 Hz задає наявний
 encoder. RC-файли, мапінг і правила recovery не змінені. Після кожного запуску
 новий процес починає з FAILSAFE, 0 кадрів; потрібно >=10 послідовних валідних
 пакетів, >=160 мс, інтервали <=60 мс. Немає відтворення команд з диска чи ARM API.

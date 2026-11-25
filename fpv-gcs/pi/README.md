@@ -1,4 +1,9 @@
-# Raspberry Pi RC Gateway — Task 7
+# Raspberry Pi RC Gateway
+
+**Починаєте з чистої microSD?** Відкрийте
+[покрокову інструкцію встановлення для Raspberry Pi 3 Model B](https://github.com/Sokolovskiy/FPV_GCS/blob/main/docs/pi-setup.md).
+Вона охоплює ОС, залежності, мережу, UART, відео, RC та автозапуск.
+Наведені нижче команди запуску потребують уже налаштованої Pi.
 
 Current configuration: UDP 14600, watchdog 300 ms, UART **420000 baud**, CRSF
 **50 Hz**. Channel mapping, 26-byte CRSF framing and es900_crsf.py are unchanged.
@@ -6,13 +11,13 @@ Current configuration: UDP 14600, watchdog 300 ms, UART **420000 baud**, CRSF
 Default operation is memory-only:
 
 ```sh
-python3 -u rc_receiver.py --dry-run --baudrate 420000 --port 14600 --timeout-ms 300 --sender 192.168.0.161
+python3 -u rc_receiver.py --dry-run --baudrate 420000 --port 14600 --timeout-ms 300 --sender 192.168.144.3
 ```
 
 Physical output is a separate explicit launch, only after bench readiness:
 
 ```sh
-python3 -u rc_receiver.py --uart --baudrate 420000 --port 14600 --timeout-ms 300 --sender 192.168.0.161
+python3 -u rc_receiver.py --uart --baudrate 420000 --port 14600 --timeout-ms 300 --sender 192.168.144.3
 ```
 
 ## Automatic recovery

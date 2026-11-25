@@ -44,6 +44,7 @@ $fpvPiStage = Join-Path $fpvStage 'pi'
 New-Item -ItemType Directory -Path (Join-Path $fpvPiStage 'systemd') -Force | Out-Null
 Copy-Item -Path (Join-Path $fpvProject 'pi\*.py') -Destination $fpvPiStage
 Copy-Item -LiteralPath (Join-Path $fpvProject 'pi\README.md') -Destination $fpvPiStage
+Copy-Item -LiteralPath (Join-Path $fpvRepo 'docs\pi-setup.md') -Destination (Join-Path $fpvPiStage 'INSTALL.md')
 foreach ($fpvPattern in @('*.py', '*.md', '*.service', '*.conf')) {
     Copy-Item -Path (Join-Path $fpvProject "pi\systemd\$fpvPattern") -Destination (Join-Path $fpvPiStage 'systemd')
 }

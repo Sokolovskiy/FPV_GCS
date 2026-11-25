@@ -90,6 +90,7 @@ ES900TX; він керує ELRS-приймачем на дроні. Аналог
 | Архітектура, протокол, USB та складання | [Технічна документація](fpv-gcs/README.md) |
 | Приймач і watchdog Raspberry Pi | [Pi gateway](fpv-gcs/pi/README.md) |
 | Встановлення сервісів Pi | [systemd](fpv-gcs/pi/systemd/README.md) |
+| MAVLink discovery та монітор вхідних команд | [MAVLink monitor](docs/herelink-monitor.md) |
 | Склад релізу та зміни | [Release notes](RELEASE_NOTES.md) |
 | Сторонні компоненти й ліцензії | [Third-party notices](fpv-gcs/THIRD-PARTY-NOTICES.md) |
 
